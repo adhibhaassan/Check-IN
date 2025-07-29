@@ -20,8 +20,7 @@ This is a general architecture and workflow approach for building a Command Line
     
 **2.EmployeeAttendance**
   - employeeId :Int
-  - checkInDate :LocalDate
-  - checkInTime :LocalTime
+  - checkInDateTime :LocalDateTime
 
 > FUNCTIONS
 
@@ -30,17 +29,17 @@ This is a general architecture and workflow approach for building a Command Line
   - stores in  employeeDetails(Map) using Employee data class.
 
 **2.listEmployee()**
-  - id and employeename will be returned.
+  - employeeId and employeeName will be returned.
     
 **3.createCheckIn()**
-  - gets user id and takes current date and current time and validates id using validateId() and hasCheckedInToday().
+  - gets user id,date and time from the user and validates id using validateId() and checks if any previous check-in has occured in that particular date using hasCheckedIn().
   - stores data in checkedInDetails map using CheckIn(Data class).
 
 **4.validateId()**
   - checks whether id is present in employeeDetails map.
 
 **5.hasCheckedIn()**
-  - checks whether id is present in checkedInDetails map.
+  - checks whether id and date is present in checkedInDetails map.
 
 > MAP
 
