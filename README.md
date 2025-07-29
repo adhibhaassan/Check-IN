@@ -57,6 +57,5 @@ employeeDetails={
 
 **2.checkedInDetails**
 checkedInDetails={
-  date1:[id1, id2, ...],
-  date2: [id1, id2, id3, ...],
+  date1:[obj1,obj2, ...]
 }
