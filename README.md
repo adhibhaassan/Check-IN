@@ -4,6 +4,10 @@
 
 This is a general architecture and workflow approach for building a Command Line Interface (CLI) based Employee Check-In System using Kotlin. The system is designed to track employee check-ins per day and ensure each employee checks in only once per day.
 
+> WORKFLOW
+
+  [Click here to open the Miro board](https://miro.com/app/board/uXjVJZ06AU4=/)
+
 >  DATA CLASSES
 
 **1.Employee**
