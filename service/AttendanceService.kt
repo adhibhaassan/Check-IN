@@ -84,4 +84,74 @@ class AttendanceService {
         return attendanceMap[id] ?: emptyList()
     }
 
+    fun addCheckOut(employeeId: Int, dateTime: LocalDateTime): Boolean {
+        val recordList = attendanceMap[employeeId] ?: return false
+
+        val record = recordList.find {
+            it.checkInDateTime.toLocalDate() == dateTime.toLocalDate() &&
+                    it.checkOutDateTime == null
+        }
+
+        return if (record != null) {
+            record.checkOutDateTime = dateTime
+            true
+        } else {
+            false
+        }
+    }
+
+    fun hasAlreadyCheckedOut(employeeId: Int, date: LocalDate): Boolean {
+        return attendanceMap[employeeId]?.any {
+            it.checkInDateTime.toLocalDate() == date && it.checkOutDateTime != null
+        } == true
+    }
+
+    fun checkOutEmployee() {
+        print("Enter your Employee ID: ")
+        val id = readlnOrNull()?.toIntOrNull()
+        if (id == null || !attendanceMap.containsKey(id)) {
+            println("Invalid ID.")
+            return
+        }
+
+        val checkOutTime = getCheckInTime() ?: return println("Invalid time.")
+
+        val success = addCheckOut(id, checkOutTime)
+
+        if (success) {
+            println("Check-out successful at ${checkOutTime.toLocalTime()}")
+            println(getWorkDurationForEmployee(id))
+        } else {
+            println("Check-out failed. Already checked out or no check-in found for today.")
+        }
+    }
+
+    fun getWorkDurationForEmployee(employeeId: Int): String {
+        val records = attendanceMap[employeeId]
+
+        if (records.isNullOrEmpty()) {
+            return "No attendance records found for Employee ID: $employeeId"
+        }
+
+        val totalDuration = records
+            .filter { it.checkOutDateTime != null } // only completed check-in/out
+            .map {
+                java.time.Duration.between(it.checkInDateTime, it.checkOutDateTime)
+            }
+            .fold(java.time.Duration.ZERO) { acc, dur -> acc.plus(dur) }
+
+        return if (totalDuration == java.time.Duration.ZERO) {
+            "No completed check-ins/check-outs found for Employee ID: $employeeId"
+        } else {
+            val hours = totalDuration.toHours()
+            val minutes = totalDuration.toMinutes() % 60
+            "Employee ID: $employeeId total working time: ${"%02d".format(hours)}h ${"%02d".format(minutes)}m"
+        }
+    }
+
+
+
+
+
 }
+
